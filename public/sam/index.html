@@ -1,4 +1,7 @@
 <!DOCTYPE html>
+<!--
+    vim:ts=4 sw=4
+-->
 <html lang="en">
     <head>
         <title>WebVR Workshop</title>
@@ -31,7 +34,7 @@
         <script src="js/utils/helpers.js"></script>
 
         <script>
-            var camera, scene, renderer;
+            var camera, scene, renderer, wineglass;
             var mobile = false;
 
             init();
@@ -81,10 +84,13 @@
                 
                 // central object
 
-                var geometry = new THREE.TorusKnotGeometry(1.64, 0.25, 25, 6);
-                var material = new THREE.MeshPhongMaterial({shading: THREE.FlatShading});
+                var geometry = new THREE.TorusKnotGeometry(1.2, 0.25, 50, 12);
+                var material = new THREE.MeshPhongMaterial({
+                    shading: THREE.SmoothShading,
+                    color: 0x00DDFF
+                });
                 var object = new THREE.Mesh(geometry, material);
-                scene.add(object);
+                //scene.add(object);
 
                 // cubes
 
@@ -115,6 +121,16 @@
                 var light = new THREE.DirectionalLight(0xffffff);
                 light.position.set(-1, 1.5, 0.5);
                 scene.add(light);
+
+                var ambient = new THREE.AmbientLight(0x555555);
+                scene.add(ambient);
+
+                var loader = new THREE.ObjectLoader();
+                loader.load('models/wineglass.json', function (object) {
+                    wineglass = object;
+                    //wineglass.scale.set(0.25, 0.25, 0.25);
+                    scene.add(wineglass);
+                });
             }
 
             function render() {
