@@ -1,4 +1,7 @@
 <!DOCTYPE html>
+<!--
+    vim:ts=4 sw=4
+-->
 <html lang="en">
     <head>
         <title>WebVR Workshop</title>
@@ -25,13 +28,13 @@
         <script src="js/third-party/threejs/controls/VRControls.js"></script>
         <script src="js/third-party/threejs/controls/DeviceOrientationControls.js"></script>
         <script src="js/third-party/threejs/controls/OrbitControls.js"></script>
-
+        
         <script src="js/third-party/TweenMax.min.js"></script>
-
+        
         <script src="js/utils/helpers.js"></script>
 
         <script>
-            var camera, scene, renderer;
+            var camera, scene, renderer, wineglass;
             var mobile = false;
 
             init();
@@ -61,7 +64,6 @@
 
                 controls = new THREE.OrbitControls(camera);
                 controls.autoRotate = true;
-                controls.autoRotateSpeed = -1
 
                 if (WEBVR.isAvailable() === true) {
                     controls = new THREE.VRControls(camera);
@@ -79,69 +81,40 @@
             }
 
             function setup() {
-                // beginning of cubemap
                 
-                var cubeMap=getCubeMap(0)
-                
-                var cubeShader = THREE.ShaderLib['cube'];
-                cubeShader.uniforms['tCube'].value = cubeMap
-
-                var skyBoxMaterial = new THREE.ShaderMaterial({
-                    fragmentShader: cubeShader.fragmentShader,
-                    vertexShader: cubeShader.vertexShader,
-                    uniforms: cubeShader.uniforms,
-                    depthWrite: false,
-                    side: THREE.BackSide
-                });
-
-                var skyBox = new THREE.Mesh(new THREE.CubeGeometry(100, 100, 100), skyBoxMaterial);
-
-                scene.add(skyBox);
-                
-                //the end
-
-                var texture = new THREE.TextureLoader().load("assets/textures/world.jpg");
-                texture.wrapS = THREE.RepeatWrapping;
-                texture.wrapT = THREE.RepeatWrapping;
-                texture.repeat.set(1, 1);
-
                 // central object
 
-                var geometry = new THREE.TorusKnotGeometry(1.14, 0.55, 35, 16);
-                var material = new THREE.MeshStandardMaterial({
-                    //color: 0,
-                    //map: texture,
-                    roughness:0,
-                    metalness:1,
-                    envMap:cubeMap,
-                    shading: THREE.FlatShading
+                var geometry = new THREE.TorusKnotGeometry(1.2, 0.25, 50, 12);
+                var material = new THREE.MeshPhongMaterial({
+                    shading: THREE.SmoothShading,
+                    color: 0x00DDFF
                 });
                 var object = new THREE.Mesh(geometry, material);
-                scene.add(object);
+                //scene.add(object);
 
                 // cubes
 
-                /*var group = new THREE.Object3D();
-                 for (var _x = -3; _x <= 3; _x++) {
-                 for (var _y = -3; _y <= 3; _y++) {
-                 for (var _z = -3; _z <= 3; _z++) {
-                 var geo = new THREE.BoxGeometry(.1, .1, .1, 1, 1, 1)
-                 var mesh = new THREE.Mesh(geo, material)
-                 mesh.position.set(_x, _y, _z)
-                 group.add(mesh);
-                 }
-                 }
-                 }
-                 
-                 // merge
-                 
-                 var geom = new THREE.Geometry()
-                 for (var i = 0; i < group.children.length; i++) {
-                 group.children[i].updateMatrix();
-                 geom.merge(group.children[i].geometry, group.children[i].matrix);
-                 }
-                 group = new THREE.Mesh(geom, material);
-                 //scene.add(group)*/
+                var group = new THREE.Object3D();
+                for (var _x = -3; _x <= 3; _x++) {
+                    for (var _y = -3; _y <= 3; _y++) {
+                        for (var _z = -3; _z <= 3; _z++) {
+                            var geo = new THREE.BoxGeometry(.1, .1, .1, 1, 1, 1)
+                            var mesh = new THREE.Mesh(geo, material)
+                            mesh.position.set(_x, _y, _z)
+                            group.add(mesh);
+                        }
+                    }
+                }
+
+                // merge
+
+                var geom = new THREE.Geometry()
+                for (var i = 0; i < group.children.length; i++) {
+                    group.children[i].updateMatrix();
+                    geom.merge(group.children[i].geometry, group.children[i].matrix);
+                }
+                group = new THREE.Mesh(geom, material);
+                scene.add(group)
 
                 // light
 
@@ -149,8 +122,15 @@
                 light.position.set(-1, 1.5, 0.5);
                 scene.add(light);
 
-                //var ambient = new THREE.AmbientLight(0xaaaaaa)
-                //scene.add(ambient)
+                var ambient = new THREE.AmbientLight(0x555555);
+                scene.add(ambient);
+
+                var loader = new THREE.ObjectLoader();
+                loader.load('models/wineglass.json', function (object) {
+                    wineglass = object;
+                    //wineglass.scale.set(0.25, 0.25, 0.25);
+                    scene.add(wineglass);
+                });
             }
 
             function render() {
