@@ -35,7 +35,7 @@
 
         <script>
             var camera, scene, renderer, wineglass, light;
-            var PERSON_HEIGHT = 1;
+            var PERSON_HEIGHT = 1.6;
             var mobile = false;
 
             init();
@@ -85,7 +85,7 @@
                 // central room
 
                 //var geometry = new THREE.TorusKnotGeometry(1.2, 0.25, 50, 12);
-                var geometry = new THREE.BoxGeometry(10, 10, 10);
+                var geometry = new THREE.BoxGeometry(20, 10, 15);
                 var texture = new THREE.TextureLoader().load(
                         'assets/textures/stone_texture948.jpg' );
                 var walls = new THREE.MeshStandardMaterial({
@@ -94,7 +94,6 @@
                 });
                 var material = new THREE.MeshBasicMaterial();
                 var room = new THREE.Mesh(geometry, walls);
-                room.position.y = 5;
                 scene.add(room);
 
                 // light
@@ -109,7 +108,7 @@
                 var loader = new THREE.ObjectLoader();
                 loader.load('models/wineglass.json', function (object) {
                     wineglass = object;
-                    wineglass.position.y = 0.01;
+                    wineglass.position.y = -4.99;
                     wineglass.scale.set(0.2, 0.2, 0.2);
                     scene.add(wineglass);
                 });
