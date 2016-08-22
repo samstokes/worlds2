@@ -10,19 +10,20 @@ function setOrientationControls(e) {
     window.removeEventListener('deviceorientation', setOrientationControls, true);
 
     if (renderer.domElement) {
-        renderer.domElement.addEventListener('click', function () {
-
-            if (this.requestFullscreen) {
-                this.requestFullscreen();
-            } else if (this.msRequestFullscreen) {
-                this.msRequestFullscreen();
-            } else if (this.mozRequestFullScreen) {
-                this.mozRequestFullScreen();
-            } else if (this.webkitRequestFullscreen) {
-                this.webkitRequestFullscreen();
+        function clickHandle() {
+            if (!window.document.webkitIsFullscreen) {
+                if (this.requestFullscreen) {
+                    this.requestFullscreen();
+                } else if (this.msRequestFullscreen) {
+                    this.msRequestFullscreen();
+                } else if (this.mozRequestFullScreen) {
+                    this.mozRequestFullScreen();
+                } else if (this.webkitRequestFullscreen) {
+                    this.webkitRequestFullscreen();
+                }
             }
-
-        });
+        }
+        renderer.domElement.addEventListener('click', clickHandle);
 
         renderer = new THREE.StereoEffect(renderer);
         renderer.setSize(window.innerWidth, window.innerHeight);
