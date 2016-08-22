@@ -40,6 +40,7 @@
 
             init();
             setup();
+            tween();
             render();
 
             function init() {
@@ -108,7 +109,7 @@
                 var loader = new THREE.ObjectLoader();
                 loader.load('models/wineglass.json', function (object) {
                     wineglass = object;
-                    wineglass.position.y = -4.99;
+                    wineglass.position.set(1, -4.99, 2);
                     wineglass.scale.set(0.2, 0.2, 0.2);
                     scene.add(wineglass);
                 });
@@ -135,6 +136,14 @@
                 }
                 renderer.render(scene, camera);
 
+            }
+
+            function tween() {
+                TweenMax.to(camera.position, 5, {
+                    x: -7 + Math.random() * 14,
+                    z: -4.5 + Math.random() * 9,
+                    onComplete: tween
+                });
             }
 
         </script>
