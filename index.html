@@ -40,7 +40,8 @@
 
             init();
             setup();
-            tween();
+            tweenCamera();
+            tweenLight();
             render();
 
             function init() {
@@ -123,7 +124,7 @@
                 controls.update();
 
                 timestep = timestamp * 0.001;
-                light.position.set(Math.sin(timestep * 0.3), Math.cos(timestep * 0.4), 0.5);
+                //light.position.set(Math.sin(timestep * 0.3), Math.cos(timestep * 0.4), 0.5);
                 //light.lookAt(scene.position);
                 if (lastTimestamp !== undefined) {
                     elapsed = timestamp - lastTimestamp;
@@ -138,11 +139,20 @@
 
             }
 
-            function tween() {
+            function tweenCamera() {
                 TweenMax.to(camera.position, 5, {
                     x: -7 + Math.random() * 14,
                     z: -4.5 + Math.random() * 9,
-                    onComplete: tween
+                    onComplete: tweenCamera
+                });
+            }
+
+            function tweenLight() {
+                TweenMax.to(light.position, 10, {
+                    x: -9 + Math.random() * 18,
+                    y: -4 + Math.random() * 8,
+                    z: -6 + Math.random() * 12,
+                    onComplete: tweenLight
                 });
             }
 
