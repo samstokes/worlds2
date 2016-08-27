@@ -52,14 +52,37 @@ function setup() {
 
     //var geometry = new THREE.TorusKnotGeometry(1.2, 0.25, 50, 12);
     var geometry = new THREE.BoxGeometry(20, 10, 15);
-    var texture = new THREE.TextureLoader().load(
-            'assets/textures/stone_texture948.jpg' );
-    var walls = new THREE.MeshStandardMaterial({
-        map: texture,
-        side: 1
+    //var texture = new THREE.TextureLoader().load(
+    //        'assets/textures/stone_texture948.jpg' );
+    var roomFaces = [
+        /* +x */ 'assets/textures/stone_texture948.jpg',
+        /* -x */ 'assets/textures/stone_texture948.jpg',
+        /* +y */ 'assets/textures/Stone-texture.jpg',
+        /* -y */ 'assets/textures/Stone Texture wall large rock grey image.jpg',
+        /* +z */ 'assets/textures/stone_texture948.jpg',
+        /* -z */ 'assets/textures/stone_texture948.jpg'
+    ];
+    var roomFaceMaterials = roomFaces.map(function (url) {
+        var texture = new THREE.TextureLoader().load(url);
+        var bumpTexture = new THREE.TextureLoader().load(url.replace(/\.jpg$/, '_bump.jpg'));
+        var bumpScale = 0.5;
+        if (url.match(/rock/)) { bumpScale = 5; }
+        return new THREE.MeshStandardMaterial({
+            map: texture,
+            bumpMap: bumpTexture,
+            bumpScale: bumpScale,
+            roughness: 0.9,
+            metalness: 0.1,
+            side: THREE.BackSide
+        });
     });
-    var material = new THREE.MeshBasicMaterial();
-    var room = new THREE.Mesh(geometry, walls);
+    //var texture = new THREE.CubeTextureLoader().load(roomFaces);
+    //var walls = new THREE.MeshStandardMaterial({
+    //    map: texture,
+    //    side: 1
+    //});
+    var roomMaterial = new THREE.MeshFaceMaterial(roomFaceMaterials);
+    var room = new THREE.Mesh(geometry, roomMaterial);
     scene.add(room);
 
     // light
