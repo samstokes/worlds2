@@ -51,7 +51,7 @@ function setup() {
     // central room
 
     //var geometry = new THREE.TorusKnotGeometry(1.2, 0.25, 50, 12);
-    var geometry = new THREE.BoxGeometry(20, 10, 15);
+    var geometry = new THREE.BoxGeometry(40, 20, 30);
     //var texture = new THREE.TextureLoader().load(
     //        'assets/textures/stone_texture948.jpg' );
     var roomFaces = [
@@ -97,8 +97,8 @@ function setup() {
     var loader = new THREE.ObjectLoader();
     loader.load('models/wineglass.json', function (object) {
         wineglass = object;
-        wineglass.position.set(1, -4.99, 2);
-        wineglass.scale.set(0.2, 0.2, 0.2);
+        wineglass.position.set(1, -9.99, 2);
+        //wineglass.scale.set(0.2, 0.2, 0.2);
         scene.add(wineglass);
     });
 }
