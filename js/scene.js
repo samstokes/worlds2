@@ -69,8 +69,8 @@ function setup() {
         if (url.match(/rock/)) { bumpScale = 5; }
         return new THREE.MeshStandardMaterial({
             map: texture,
-            bumpMap: bumpTexture,
-            bumpScale: bumpScale,
+            //bumpMap: bumpTexture,
+            //bumpScale: bumpScale,
             roughness: 0.9,
             metalness: 0.1,
             side: THREE.BackSide
